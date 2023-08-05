@@ -99,7 +99,6 @@ EMAIL_HOST_PASSWORD = '위 설정에 사용한 GMail 비밀번호'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
-]
 
 THIRD_PARTY_APPS = [
 'corsheaders',
