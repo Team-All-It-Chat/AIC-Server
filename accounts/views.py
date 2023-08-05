@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import *
 from rest_framework_simplejwt.serializers import RefreshToken
@@ -16,15 +16,14 @@ for _ in range(6):
 
 
 class MemberProfile(APIView):
-    serializer_class = MemberSerializer
     def get(self, request, id):
-        profiles = Member.objects.filter(id = id)
-        serializer = self.serializer_class(profiles)
+        profiles = get_object_or_404(Member, id=id)
+        serializer = MemberSerializer(profiles)
         
-        return {
+        return JsonResponse({
             "data" : serializer.data,
             "status" : 200
-        }
+        })
         
 
 class RegisterView(APIView):
@@ -58,6 +57,7 @@ class RegisterView(APIView):
                         "refresh_token":refresh_token,
                     },
                     "cert_number" : CERT_NUMBER,
+                    "id" : member.id,
                 },
                 status=status.HTTP_201_CREATED,
             )

@@ -9,6 +9,7 @@ def korean_validator(value):
 
 class Member(AbstractUser):
     # 공통
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=8, validators=[korean_validator])
      
     kor_univ = models.CharField(max_length=20)

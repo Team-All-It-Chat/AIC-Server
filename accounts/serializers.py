@@ -7,7 +7,7 @@ class MemberSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Member
-        field = "__all__"
+        fields = "__all__"
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(required=True)
