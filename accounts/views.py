@@ -1,17 +1,31 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 from .models import *
 from rest_framework_simplejwt.serializers import RefreshToken
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from accounts.serializers import RegisterSerializer
-from accounts.serializers import AuthSerializer
-import string
+from accounts.serializers import *
+from django.core.mail import EmailMessage
 import random
-import threading
-from django.conf import settings
-from django.core.mail import EmailMultiAlternatives
 
+CERT_NUMBER = ""
+
+for _ in range(6):
+    CERT_NUMBER += str(random.randrange(0,10))
+
+
+class MemberProfile(APIView):
+    serializer_class = MemberSerializer
+    def get(self, request, id):
+        profiles = Member.objects.filter(id = id)
+        serializer = self.serializer_class(profiles)
+        
+        return {
+            "data" : serializer.data,
+            "status" : 200
+        }
+        
 
 class RegisterView(APIView):
     serializer_class = RegisterSerializer
@@ -24,8 +38,16 @@ class RegisterView(APIView):
             token = RefreshToken.for_user(member)
             refresh_token = str(token)
             access_token = str(token.access_token)
+            
+            # refresh token 저장
             member.refresh_token = refresh_token
             member.save()
+            
+            # 이메일로 인증번호 발송
+            subject = "All-It-Chat 인증번호"
+            to = [Member.kor_email]
+            message = CERT_NUMBER
+            EmailMessage(subject=subject, body=message, to=to).send()
 
             res = Response(
                 {
@@ -35,6 +57,7 @@ class RegisterView(APIView):
                         "access_token":access_token,
                         "refresh_token":refresh_token,
                     },
+                    "cert_number" : CERT_NUMBER,
                 },
                 status=status.HTTP_201_CREATED,
             )
@@ -81,6 +104,10 @@ class AuthView(APIView):
         res.delete_cookie("refresh-token")
         return res
 
-
-
-
+class EmailView(APIView):
+    def get(self, request, result):
+        if result == "True":
+            return JsonResponse({
+                "data" : "success",
+                "status" : 200,
+            })
