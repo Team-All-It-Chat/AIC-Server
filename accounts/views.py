@@ -42,10 +42,10 @@ class RegisterView(APIView):
             # refresh token 저장
             member.refresh_token = refresh_token
             member.save()
-            
+            print(serializer.data)
             # 이메일로 인증번호 발송
             subject = "All-It-Chat 인증번호"
-            to = [Member.kor_email]
+            to = [serializer.data['kor_email']]
             message = CERT_NUMBER
             EmailMessage(subject=subject, body=message, to=to).send()
 
