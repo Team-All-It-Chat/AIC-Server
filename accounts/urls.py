@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     # 프로필
-    path('', MemberProfile.as_view()),
+    path('<int:id>/', MemberProfile.as_view()),
     # 회원가입/로그인/로그아웃
     path('join/', RegisterView.as_view()),
     path('login/', AuthView.as_view()),
