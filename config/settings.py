@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import json
 from django.core.exceptions import *
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,6 +46,10 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
+
+# Application definition
+
+
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -56,6 +61,43 @@ DJANGO_APPS = [
 ]
 
 PROJECT_APPS = [
+
+    'accounts',
+]
+
+THIRD_PARTY_APPS = [
+    'rest_framework_simplejwt',
+]
+
+
+INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
+
+AUTH_USER_MODEL = 'accounts.Member'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+REST_USE_JWT = True
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=3),    # 유효기간 3시간
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),    # 유효기간 7일
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
+    'TOKEN_USER_CLASS': 'accounts.Member',
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'user@gmail.com(위 설정에 사용한 GMail 계정)'
+EMAIL_HOST_PASSWORD = '위 설정에 사용한 GMail 비밀번호'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 ]
 
