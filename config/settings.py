@@ -41,12 +41,14 @@ SECRET_KEY = get_secret("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
+
 # Application definition
+
 
 DJANGO_APPS = [
     'django.contrib.admin',
@@ -55,9 +57,11 @@ DJANGO_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
 ]
 
 PROJECT_APPS = [
+
     'accounts',
 ]
 
@@ -94,6 +98,16 @@ EMAIL_HOST_USER = 'user@gmail.com(위 설정에 사용한 GMail 계정)'
 EMAIL_HOST_PASSWORD = '위 설정에 사용한 GMail 비밀번호'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+
+]
+
+THIRD_PARTY_APPS = [
+'corsheaders',
+'storages',
+]
+
+INSTALLED_APPS=DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -102,6 +116,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [ 
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -129,9 +151,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+	'default': {
+        'ENGINE': 'django.db.backends.mysql',
+		'NAME': 'likelion',
+		'USER': get_secret("DB_USER"),
+		'PASSWORD': get_secret("DB_PASSWORD"),
+		'HOST': get_secret("DB_HOST"),
+		'PORT': '3306',
     }
 }
 
@@ -176,3 +202,20 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# AWS 권한 설정
+AWS_ACCESS_KEY_ID = get_secret('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = get_secret('AWS_SECRET_ACCESS_KEY')
+AWS_REGION = 'ap-northeast-2'
+
+# AWS S3 버킷 이름
+AWS_STORAGE_BUCKET_NAME = 'likelionasdfg'
+
+# AWS S3 버킷의 URL
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME,AWS_REGION)
+
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
