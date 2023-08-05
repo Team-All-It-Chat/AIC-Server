@@ -119,12 +119,17 @@ MIDDLEWARE = [
 ]
 
 CSRF_TRUSTED_ORIGINS = ["https://all-it-chat.o-r.kr/"]
-
+CORS_ORIGIN_WHITELIST = [
+    'https://all-it-chat.o-r.kr',
+    # 다른 허용할 도메인들을 여기에 추가
+]
 CORS_ALLOW_CREDENTIALS = True
+
 
 CORS_ALLOWED_ORIGINS = [ 
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://all-it-chat.o-r.kr/"
 ]
 
 ROOT_URLCONF = 'config.urls'
