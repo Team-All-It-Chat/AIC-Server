@@ -9,12 +9,6 @@ from accounts.serializers import *
 from django.core.mail import EmailMessage
 import random
 
-CERT_NUMBER = ""
-
-for _ in range(6):
-    CERT_NUMBER += str(random.randrange(0,10))
-
-
 class MemberProfile(APIView):
     def get(self, request, id):
         profiles = get_object_or_404(Member, id=id)
@@ -41,13 +35,31 @@ class RegisterView(APIView):
             # refresh token 저장
             member.refresh_token = refresh_token
             member.save()
-            print(serializer.data)
+            
+            # 6자리 인증번호 생성
+            MENTEE_CERT_NUMBER = ""
+            MENTOR_CERT_NUMBER = ""
+
+            for _ in range(6):
+                MENTEE_CERT_NUMBER += str(random.randrange(0,10))
+            
             # 이메일로 인증번호 발송
-            subject = "All-It-Chat 인증번호"
+            subject = "All-It-Chat 멘티 가입 인증번호"
             to = [serializer.data['kor_email']]
-            message = CERT_NUMBER
+            message = MENTEE_CERT_NUMBER
             EmailMessage(subject=subject, body=message, to=to).send()
 
+            if serializer.data['foregin_email'] != '':
+                
+                for _ in range(6):
+                    MENTOR_CERT_NUMBER += str(random.randrange(0,10))
+
+                # 이메일로 인증번호 발송
+                subject = "All-It-Chat 멘토 가입 인증번호"
+                to = [serializer.data['foreign_email']]
+                message = MENTOR_CERT_NUMBER
+                EmailMessage(subject=subject, body=message, to=to).send()
+            
             res = Response(
                 {
                     "member":serializer.data,
@@ -56,8 +68,10 @@ class RegisterView(APIView):
                         "access_token":access_token,
                         "refresh_token":refresh_token,
                     },
-                    "cert_number" : CERT_NUMBER,
-                    "id" : member.id,
+                    "cert_number" : {
+                        "mentee" : MENTEE_CERT_NUMBER,
+                        "mentor" : MENTOR_CERT_NUMBER,
+                        },
                 },
                 status=status.HTTP_201_CREATED,
             )
@@ -104,10 +118,29 @@ class AuthView(APIView):
         res.delete_cookie("refresh-token")
         return res
 
-class EmailView(APIView):
-    def get(self, request, result):
-        if result == "True":
+class ConfirmView(APIView):
+    def post(self, request):
+        
+        member = get_object_or_404(Member, name=request.data["member"]["name"])
+        print(member.is_active)
+        
+        if not request.data["confirm"]:
             return JsonResponse({
-                "data" : "success",
-                "status" : 200,
+            "message" : "실패"
             })
+        elif member.is_active:
+            member.is_mento = True
+            member.save()
+            return JsonResponse({
+                "message" : "멘토 인증 성공"
+            })
+        else:        
+            member.is_active = True
+            member.save()
+            return JsonResponse({
+                "message" : "멘티 인증 성공"
+            })
+        
+    
+        
+        
