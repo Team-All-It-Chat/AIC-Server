@@ -118,7 +118,10 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-CSRF_TRUSTED_ORIGINS = ["https://all-it-chat.o-r.kr/"]
+ALLOWED_ORIGINS = ["https://all-it-chat.o-r.kr"]
+CSRF_TRUSTED_ORIGINS = ALLOWED_ORIGINS.copy()
+
+#CSRF_TRUSTED_ORIGINS = ["https://all-it-chat.o-r.kr"]
 CORS_ORIGIN_WHITELIST = [
     'https://all-it-chat.o-r.kr',
     # 다른 허용할 도메인들을 여기에 추가
