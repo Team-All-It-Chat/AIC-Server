@@ -30,14 +30,11 @@ class Profile(models.Model):
     
     foreign_email = models.EmailField(blank=True)
     
-    exchangeSemester = models.CharField(max_length=10, blank=True)
+    exchangeSemester = models.CharField(max_length=10, blank=True)    
+    exchangeDuration = models.CharField(max_length=10, blank=True)
     
-    CHOICE = (
-        ('1학기', '1학기'),
-        ('1년', '1년'),
-    )
-    
-    exchangeDuration = models.CharField(max_length=10, choices=CHOICE, blank=True)
+    star_score = models.IntegerField(blank=True)
+    total_score = models.IntegerField(blank=True)
 
 class Member(AbstractUser):
     id = models.AutoField(primary_key=True)    
