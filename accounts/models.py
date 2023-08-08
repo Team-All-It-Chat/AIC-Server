@@ -7,8 +7,8 @@ def korean_validator(value):
     if not all('\uac00' <= char <= '\ud7a3' for char in value):
         raise validators.ValidationError("한글만 입력 가능합니다.")
 
-class Member(AbstractUser):
-    # 공통
+class Profile(models.Model):    
+    
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=8, validators=[korean_validator])
      
@@ -23,9 +23,7 @@ class Member(AbstractUser):
         
     # 멘토 사용자만   
     continent = models.CharField(max_length=20, blank=True)
-    contry = models.CharField(max_length=20, blank=True)
-    language = models.CharField(max_length=20, blank=True)
-    
+    contry = models.CharField(max_length=20, blank=True)    
     
     foreign_univ = models.CharField(max_length=20, blank=True)
     foreign_major = models.CharField(max_length=20, blank=True)
@@ -40,4 +38,8 @@ class Member(AbstractUser):
     )
     
     exchangeDuration = models.CharField(max_length=10, choices=CHOICE, blank=True)
-    
+
+class Member(AbstractUser):
+    id = models.AutoField(primary_key=True)    
+    profile = models.ForeignKey(to=Profile , on_delete=models.CASCADE)  
+        
