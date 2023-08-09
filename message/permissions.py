@@ -1,6 +1,6 @@
 from rest_framework.permissions import BasePermission
 from django.contrib.auth.models import User
-
+from rest_framework import permissions
 
 class IsMentee(BasePermission):
     def has_permission(self, request, view):
@@ -10,16 +10,14 @@ class IsMentee(BasePermission):
         # 그 외에는 접근을 허용함
         return True
 
+class IsNonMentorUser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and not request.user.is_mentor
 
+class IsAnswerer(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return obj.answerer == request.user
 
-# #receiver 확인이 잘 안됨...
-
-# class IsReceiver(BasePermission):
-#     def has_object_permission(self, request, view, obj):
-#         return request.user.is_authenticated and obj.question.receiver == request.user
-
-
-
-# class IsAnswerReceiver(BasePermission):
-#     def has_object_permission(self, request, view, obj):
-#         return request.user.is_authenticated and obj.answer.receiver == request.user
+class IsQuestioner(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return obj.questioner == request.user
