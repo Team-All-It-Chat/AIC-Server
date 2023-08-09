@@ -63,10 +63,14 @@ DJANGO_APPS = [
 PROJECT_APPS = [
 
     'accounts',
+    'posts',
 ]
 
 THIRD_PARTY_APPS = [
     'rest_framework_simplejwt',
+    'rest_framework',
+    'corsheaders',
+    'storages',
 ]
 
 
@@ -83,7 +87,7 @@ REST_FRAMEWORK = {
 REST_USE_JWT = True
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=3),    # 유효기간 3시간
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),    # 유효기간 30일
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),    # 유효기간 7일
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
@@ -98,14 +102,6 @@ EMAIL_HOST_USER = 'didgmlcjf1489@gmail.com'
 EMAIL_HOST_PASSWORD = get_secret("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-
-
-THIRD_PARTY_APPS = [
-'corsheaders',
-'storages',
-]
-
-INSTALLED_APPS=DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     #'django.middleware.security.SecurityMiddleware',
@@ -160,15 +156,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-	'default': {
-        'ENGINE': 'django.db.backends.mysql',
-		'NAME': 'likelion',
-		'USER': get_secret("DB_USER"),
-		'PASSWORD': get_secret("DB_PASSWORD"),
-		'HOST': get_secret("DB_HOST"),
-		'PORT': '3306',
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+# 	'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+# 		'NAME': 'likelion',
+# 		'USER': get_secret("DB_USER"),
+# 		'PASSWORD': get_secret("DB_PASSWORD"),
+# 		'HOST': get_secret("DB_HOST"),
+# 		'PORT': '3306',
+#     }
+# }
 
 
 # Password validation
