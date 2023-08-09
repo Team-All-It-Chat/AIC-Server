@@ -32,10 +32,9 @@ class ChatSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # 현재 로그인한 사용자 가져오기
         questioner = self.context['request'].user
-
+        print(questioner)
         # "질문자" 필드를 현재 로그인한 사용자로 설정
         validated_data['questioner'] = questioner
-        #validated_data['questioner'] = 1
         
 
         # 현재 시간을 설정하여 question_time에 저장

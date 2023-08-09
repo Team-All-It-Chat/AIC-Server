@@ -16,8 +16,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import ChatSerializer, ReviewSerializer
 from .models import Chat, Review
-
-class QuestionCreateView(APIView):
+    
+class ChatAPIViews(APIView):
+     #질문 등록하기
     def post(self, request, format=None):
         # 질문과 관련된 데이터를 받아옴
         question = request.data.get('question')
@@ -25,7 +26,7 @@ class QuestionCreateView(APIView):
 
         if not question or not answerer:
             return Response({"message": "question과 answerer 필드를 제공해야 합니다."}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         # 질문 데이터를 직렬화
         serializer = ChatSerializer(data=request.data, context={'request': request})
         
@@ -39,84 +40,6 @@ class QuestionCreateView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-class question(APIView):
-    def post(self, request, format=None):
-        #self.permission_classes=[IsMentee]
-        #data = JSONParser().parse(request)
-        question = request.data.get('question')
-        answerer = request.data.get('answerer')
-
-        if not question or not answerer:
-            return Response({"message": "question과 answerer 필드를 제공해야 합니다."}, status=status.HTTP_400_BAD_REQUEST)
-        
-        serializer = ChatSerializer(data=request.data, context={'request': request})
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class MyAPIViews(APIView):
-    #permission_classes = [IsAuthenticated]
-    def dispatch(self, request, *args, **kwargs):
-        if request.method == 'GET':
-            return self.get(request, *args, **kwargs)
-        elif request.method == 'POST':
-            return self.post(request, *args, **kwargs)
-        elif request.method == 'PATCH':
-            queryset = Chat.objects.all()
-            serializer_class = ChatUpdateSerializer
-            return self.patch(request, *args, **kwargs)
-        elif request.method == "PUT":
-            queryset = Review.objects.all()
-            serializer_class = ReviewUpdateSerializer
-            return self.put(request, *args, **kwargs)
-        else:
-            return Response({"message": "Invalid method"}, status=status.HTTP_400_BAD_REQUEST)
-    
-    #질문 등록하기
-    def post(self, request, format=None):
-        # 질문과 관련된 데이터를 받아옴
-        question = request.data.get('question')
-        answerer = request.data.get('answerer')
-
-        if not question or not answerer:
-            return Response({"message": "question과 answerer 필드를 제공해야 합니다."}, status=status.HTTP_400_BAD_REQUEST)
-        
-        # 질문 데이터를 직렬화
-        serializer = ChatSerializer(data=request.data, context={'request': request})
-        
-        if serializer.is_valid():
-            # 질문 데이터 저장
-            chat = serializer.save()
-
-            # 해당 질문에 대한 리뷰 생성
-            Review.objects.create(chat=chat)
-
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-       
-    # def post(self, request, format=None):
-    #     #self.permission_classes=[IsMentee]
-    #     #data = JSONParser().parse(request)
-    #     question = request.data.get('question')
-    #     answerer = request.data.get('answerer')
-
-    #     if not question or not answerer:
-    #         return Response({"message": "question과 answerer 필드를 제공해야 합니다."}, status=status.HTTP_400_BAD_REQUEST)
-        
-    #     serializer = ChatSerializer(data=request.data, context={'request': request})
-        
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
     #답변 등록하기
     def patch(self,request,*args,**kwargs):
         chat_id = request.data.get('chat_id')  # JSON 데이터에서 chat_id 받아오기
@@ -168,8 +91,7 @@ class MyAPIViews(APIView):
         
         chat.status = 2
         chat.save()
-        return Response(serializer.data)
-     
+        return Response(serializer.data)   
 
 #질문 상태를 대기-> 수락으로 변경하기
 class ChatUpdateStatusAPIView(UpdateAPIView):

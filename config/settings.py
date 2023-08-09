@@ -100,7 +100,7 @@ EMAIL_HOST_USER = 'didgmlcjf1489@gmail.com'
 EMAIL_HOST_PASSWORD = get_secret("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-INSTALLED_APPS=DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
+
 
 MIDDLEWARE = [
     #'django.middleware.security.SecurityMiddleware',
