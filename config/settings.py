@@ -62,13 +62,15 @@ DJANGO_APPS = [
 
 PROJECT_APPS = [
 
-    'accounts',
+    'accounts','message',
 ]
 
 THIRD_PARTY_APPS = [
     'rest_framework_simplejwt',
+    'rest_framework',
+    'corsheaders',
+    'storages',
 ]
-
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
@@ -97,13 +99,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'hc1489@naver.com'
 EMAIL_HOST_PASSWORD = get_secret("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-
-
-THIRD_PARTY_APPS = [
-'corsheaders',
-'storages',
-]
 
 INSTALLED_APPS=DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
@@ -160,15 +155,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-	'default': {
-        'ENGINE': 'django.db.backends.mysql',
-		'NAME': 'likelion',
-		'USER': get_secret("DB_USER"),
-		'PASSWORD': get_secret("DB_PASSWORD"),
-		'HOST': get_secret("DB_HOST"),
-		'PORT': '3306',
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+# 	'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+# 		'NAME': 'likelion',
+# 		'USER': get_secret("DB_USER"),
+# 		'PASSWORD': get_secret("DB_PASSWORD"),
+# 		'HOST': get_secret("DB_HOST"),
+# 		'PORT': '3306',
+#     }
+# }
 
 
 # Password validation
