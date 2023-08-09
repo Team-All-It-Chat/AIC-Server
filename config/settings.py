@@ -62,7 +62,9 @@ DJANGO_APPS = [
 
 PROJECT_APPS = [
 
-    'accounts','message',
+    'accounts',
+    'posts',
+    'message'
 ]
 
 THIRD_PARTY_APPS = [
@@ -85,7 +87,7 @@ REST_FRAMEWORK = {
 REST_USE_JWT = True
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=3),    # 유효기간 3시간
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),    # 유효기간 30일
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),    # 유효기간 7일
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
@@ -99,6 +101,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'didgmlcjf1489@gmail.com'
 EMAIL_HOST_PASSWORD = get_secret("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
 
 
 
