@@ -24,11 +24,12 @@ class Member(AbstractUser):
     continent = models.CharField(max_length=20, blank=True)
     contry = models.CharField(max_length=20, blank=True)    
     
+    
     foreign_univ = models.CharField(max_length=20, blank=True)
     foreign_major = models.CharField(max_length=20, blank=True)
     
     foreign_email = models.EmailField(blank=True)
-    null=True, 
+
     exchangeSemester = models.CharField(max_length=10, blank=True)    
     exchangeDuration = models.CharField(max_length=10, blank=True)
     
