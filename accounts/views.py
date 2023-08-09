@@ -10,7 +10,7 @@ from django.core.mail import EmailMessage
 
 class MemberProfile(APIView):
     def get(self, request, id):
-        profiles = get_object_or_404(Profile, id=id)
+        profiles = get_object_or_404(Member, id=id)
         serializer = MemberSerializer(profiles)
         
         return JsonResponse({

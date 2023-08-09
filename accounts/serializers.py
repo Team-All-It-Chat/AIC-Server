@@ -22,6 +22,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         member = Member.objects.create(
             username=self.validated_data['username'],
             name=self.validated_data['name'],
+            is_mentor=self.validated_data['is_mentor'],
             kor_univ=self.validated_data['kor_univ'],
             kor_major=self.validated_data['kor_major'],
             kor_email=self.validated_data['kor_email'],
