@@ -175,4 +175,4 @@ cython_debug/
 
 secrets.json
 
-accounts.migrations
+accounts.migrations.py

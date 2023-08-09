@@ -7,17 +7,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from accounts.serializers import *
 from django.core.mail import EmailMessage
-import random
-
-CERT_NUMBER = ""
-
-for _ in range(6):
-    CERT_NUMBER += str(random.randrange(0,10))
-
 
 class MemberProfile(APIView):
     def get(self, request, id):
-        profiles = get_object_or_404(Member, id=id)
+        profiles = get_object_or_404(Profile, id=id)
         serializer = MemberSerializer(profiles)
         
         return JsonResponse({
@@ -41,13 +34,7 @@ class RegisterView(APIView):
             # refresh token 저장
             member.refresh_token = refresh_token
             member.save()
-            print(serializer.data)
-            # 이메일로 인증번호 발송
-            subject = "All-It-Chat 인증번호"
-            to = [serializer.data['kor_email']]
-            message = CERT_NUMBER
-            EmailMessage(subject=subject, body=message, to=to).send()
-
+            
             res = Response(
                 {
                     "member":serializer.data,
@@ -56,8 +43,6 @@ class RegisterView(APIView):
                         "access_token":access_token,
                         "refresh_token":refresh_token,
                     },
-                    "cert_number" : CERT_NUMBER,
-                    "id" : member.id,
                 },
                 status=status.HTTP_201_CREATED,
             )
@@ -103,11 +88,7 @@ class AuthView(APIView):
         res.delete_cookie("access-token")
         res.delete_cookie("refresh-token")
         return res
-
-class EmailView(APIView):
-    def get(self, request, result):
-        if result == "True":
-            return JsonResponse({
-                "data" : "success",
-                "status" : 200,
-            })
+        
+    
+        
+        
