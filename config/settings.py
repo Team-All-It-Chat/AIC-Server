@@ -41,12 +41,14 @@ SECRET_KEY = get_secret("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
+
 # Application definition
+
 
 DJANGO_APPS = [
     'django.contrib.admin',
@@ -55,16 +57,20 @@ DJANGO_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
 ]
 
 PROJECT_APPS = [
-    'accounts',
+
+    'accounts','message',
 ]
 
 THIRD_PARTY_APPS = [
     'rest_framework_simplejwt',
+    'rest_framework',
+    'corsheaders',
+    'storages',
 ]
-
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
@@ -94,14 +100,34 @@ EMAIL_HOST_USER = 'didgmlcjf1489@gmail.com'
 EMAIL_HOST_PASSWORD = get_secret("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+INSTALLED_APPS=DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
+
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
+    #'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+]
+
+ALLOWED_ORIGINS = ["https://all-it-chat.o-r.kr"]
+CSRF_TRUSTED_ORIGINS = ALLOWED_ORIGINS.copy()
+
+#CSRF_TRUSTED_ORIGINS = ["https://all-it-chat.o-r.kr"]
+CORS_ORIGIN_WHITELIST = [
+    'https://all-it-chat.o-r.kr',
+    # 다른 허용할 도메인들을 여기에 추가
+]
+CORS_ALLOW_CREDENTIALS = True
+
+
+CORS_ALLOWED_ORIGINS = [ 
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://all-it-chat.o-r.kr"
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -134,6 +160,17 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+# 	'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+# 		'NAME': 'likelion',
+# 		'USER': get_secret("DB_USER"),
+# 		'PASSWORD': get_secret("DB_PASSWORD"),
+# 		'HOST': get_secret("DB_HOST"),
+# 		'PORT': '3306',
+#     }
+# }
 
 
 # Password validation
@@ -176,3 +213,20 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# AWS 권한 설정
+AWS_ACCESS_KEY_ID = get_secret('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = get_secret('AWS_SECRET_ACCESS_KEY')
+AWS_REGION = 'ap-northeast-2'
+
+# AWS S3 버킷 이름
+AWS_STORAGE_BUCKET_NAME = 'likelionasdfg'
+
+# AWS S3 버킷의 URL
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME,AWS_REGION)
+
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
