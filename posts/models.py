@@ -15,3 +15,5 @@ class Post(models.Model):
     tag2 = models.CharField(max_length=10)
     
     image = models.ImageField()
+    
+    created_at = models.DateTimeField(verbose_name="작성일시", auto_now_add=True)

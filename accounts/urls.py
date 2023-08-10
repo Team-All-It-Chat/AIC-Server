@@ -6,7 +6,7 @@ urlpatterns = [
     # 프로필
     path('<int:id>/', MemberProfile.as_view()),
     # 회원가입/로그인/로그아웃
-    path('join/', RegisterView.as_view()),
+    path('signup/', RegisterView.as_view()),
     path('login/', AuthView.as_view()),
     # 토큰
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
