@@ -116,7 +116,7 @@ class ChatAPIViews(APIView):
             if chat.answerer.total_score is None:
                 chat.answerer.total_score = rate
             else:
-                chat.answerer.total_score = (float(chat.answerer.total_score)+float(rate))/float(chat.answerer.review_count)
+                chat.answerer.total_score = (float(chat.answerer.total_score)*float(chat.answerer.review_count-1)+float(rate))/float(chat.answerer.review_count)
 
             chat.answerer.save()
             
