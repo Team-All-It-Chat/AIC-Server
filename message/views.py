@@ -106,17 +106,19 @@ class ChatAPIViews(APIView):
         if serializer.is_valid():
             serializer.save(sent_time=timezone.now())
                       
-            if chat.questioner.review_count is not None:
-                chat.questioner.review_count += 1
+            if chat.answerer.review_count is not None:
+                chat.answerer.review_count += 1
             else:
-                chat.questioner.review_count=1
+                chat.answerer.review_count=1
             
-            chat.questioner.save()
+            chat.answerer.save()
                        
-            if chat.questioner.review_count != 0:
-                chat.questioner.total_score /= chat.questioner.review_count
+            if chat.answerer.total_score is None:
+                chat.answerer.total_score = rate
+            else:
+                chat.answerer.total_score = (float(chat.answerer.total_score)+float(rate))/float(chat.answerer.review_count)
 
-            chat.questioner.save()
+            chat.answerer.save()
             
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
