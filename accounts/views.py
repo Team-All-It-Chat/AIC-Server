@@ -8,10 +8,10 @@ from rest_framework import status
 from accounts.serializers import *
 from django.core.mail import EmailMessage
 
-class MemberProfile(APIView):
-    def get(self, request, id):
-        profiles = get_object_or_404(Member, id=id)
-        serializer = MemberSerializer(profiles)
+class MentorProfile(APIView):
+    def get(self, request, continent):
+        profiles = Member.objects.filter(continent=continent)
+        serializer = MemberSerializer(profiles, many=True)
         
         return JsonResponse({
             "data" : serializer.data,
@@ -50,7 +50,7 @@ class RegisterView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class AuthView(APIView):
+class MenteeAuthView(APIView):
     serializer_class = AuthSerializer
 
     def post(self, request):
@@ -88,7 +88,45 @@ class AuthView(APIView):
         res.delete_cookie("access-token")
         res.delete_cookie("refresh-token")
         return res
+    
+class MentorAuthView(APIView):
+    serializer_class = AuthSerializer
+
+    def post(self, request):
+
+        serializer = self.serializer_class(data=request.data)
+						
+        if serializer.is_valid(raise_exception=False):
+            member = serializer.validated_data['member']
+            access_token = serializer.validated_data['access_token']
+            refresh_token = serializer.validated_data['refresh_token']
+            res = Response(
+                {
+                    "member": member,
+                    "message":"login success",
+                    "token":{
+                        "access_token":access_token,
+                        "refresh_token":refresh_token,
+                    },
+                },
+                status=status.HTTP_200_OK,
+            )
+            res.set_cookie("access-token", access_token, httponly=True)
+            res.set_cookie("refresh-token", refresh_token, httponly=True)
+            return res
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
     
+    def delete(self, request):
+        res = Response({
+		    "message":"logout success"
+	    }, status=status.HTTP_202_ACCEPTED)
+		
+		# cookie에서 token 값들을 제거함
+        res.delete_cookie("access-token")
+        res.delete_cookie("refresh-token")
+        return res
+          
         
         

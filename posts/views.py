@@ -7,7 +7,8 @@ import json
 from .models import Post
 import datetime as dt
 from .serializers import PostSerializer
-
+from accounts.serializers import MemberSerializer
+from accounts.models import Member
 #APIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -26,15 +27,26 @@ class PostList(APIView):
         serializer = PostSerializer(data=request.data) 
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return JsonResponse({
+                'status' : 200,
+                'message' : '생성 성공',
+                'result' : serializer.data
+            })
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({
+                'status' : 400,
+                'message' : '유효하지 않은 데이터',
+                'result' : None
+            })
     
     def get(self, request, format=None):
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data)
-
+        return JsonResponse({
+            "status" : 200,
+            "message" : "전체 게시글 조회 성공",
+            "result" : serializer.data
+        })    
 class PostDetail(APIView):
     
     permission_classes = [IsWriterOrReadOnly]    
@@ -47,18 +59,54 @@ class PostDetail(APIView):
     def get(self, request, id):
         post = self.get_object(id = id)
         serializers = PostSerializer(post)
-        return Response(serializers.data)
+        return JsonResponse({
+            'status' : 200,
+            'message' : '조회 성공',
+            'result' : serializers.data
+        })
     
     def put(self, request, id):
         post = self.get_object(id = id)
         serializers = PostSerializer(post, data=request.data)
         if serializers.is_valid():
             serializers.save()
-            return Response(serializers.data, status=status.HTTP_201_CREATED)
+            return JsonResponse({
+            'status' : 200,
+            'message' : '수정 성공',
+            'result' : serializers.data
+        })
         else:
-            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({
+                'status' : 400,
+                'message' : '유효하지 않은 데이터',
+                'result' : None
+            })
     
     def delete(self, request, id):
         post = self.get_object(id = id)
         post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return JsonResponse({
+            'status' : 200,
+            'message' : '삭제 성공',
+            'result' : None
+        })
+    
+class TipPost(APIView):
+    
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    def get(self, request, continent):
+        members = Member.objects.filter(continent=continent)
+        tipList = []
+        serializer = MemberSerializer(members, many=True)
+        
+        for member in serializer.data:
+            posts = Post.objects.filter(writer=member['id'])
+            serializer2 = PostSerializer(posts, many=True)
+            tipList.append(serializer2.data)
+            
+        return JsonResponse({
+            "status" : 200,
+            "message" : "타이틀 조회 성공",
+            "result" : tipList
+        })    

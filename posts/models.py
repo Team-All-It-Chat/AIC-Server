@@ -11,9 +11,9 @@ class Post(models.Model):
     title = models.CharField(max_length=30)   
     content = models.TextField()
     
-    tag1 = models.CharField(max_length=10)
-    tag2 = models.CharField(max_length=10)
+    tag1 = models.CharField(max_length=10,null=True, blank=True)
+    tag2 = models.CharField(max_length=10,null=True, blank=True)
     
-    image = models.ImageField()
+    image = models.ImageField(null=True, blank=True)
     
     created_at = models.DateTimeField(verbose_name="작성일시", auto_now_add=True)
