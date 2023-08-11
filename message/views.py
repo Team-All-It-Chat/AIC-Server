@@ -10,7 +10,8 @@ from rest_framework.generics import UpdateAPIView
 from rest_framework.parsers import JSONParser
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
-
+from django.utils import timezone
+from rest_framework.generics import UpdateAPIView
 
 #질문 상태를 대기-> 수락으로 변경하기
 class ChatUpdateStatusAPIView(APIView):
@@ -50,14 +51,17 @@ class RecentQuestionAPIView(APIView):
             return Response({"message": "최근에 올린 질문글이 없습니다."}, status=401)
         
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.utils import timezone
-from django.shortcuts import get_object_or_404
-from rest_framework.generics import UpdateAPIView
-from .models import Chat
-from .serializers import ChatSerializer, ChatAnswerSerializer, ReviewSerializer
+class ChatWithReviewAPIView(APIView):
+    def get(self, request):
+        chat_id = request.data.get('chat_id')  # JSON 형식으로 chat_id 받음
+        try:
+            chat = Chat.objects.get(pk=chat_id)
+        except Chat.DoesNotExist:
+            return Response({"message": "Chat not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = ChatWithReviewSerializer(chat)
+        return Response(serializer.data)
+
 
 class ChatAPIViews(APIView):
     permission_classes = [IsAuthenticated]   
@@ -138,3 +142,6 @@ class ChatAPIViews(APIView):
 
         serializer = AllChatSerializer(my_chats, many=True)
         return Response(serializer.data)
+    
+    
+

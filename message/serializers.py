@@ -35,3 +35,15 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         fields = '__all__'
 
+class ChatWithReviewSerializer(serializers.ModelSerializer):
+    reviews = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Chat
+        fields = ['id', 'question', 'answer', 'question_time', 'answer_time', 'status', 'reviews']
+
+    def get_reviews(self, chat):
+        reviews = Review.objects.filter(chat_id=chat.id)
+        serializer = ReviewSerializer(reviews, many=True)
+        return serializer.data
+
