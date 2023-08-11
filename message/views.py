@@ -57,7 +57,7 @@ class ChatWithReviewAPIView(APIView):
         try:
             chat = Chat.objects.get(pk=chat_id)
         except Chat.DoesNotExist:
-            return Response({"message": "Chat not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "채팅이 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = ChatWithReviewSerializer(chat)
         return Response(serializer.data)
@@ -67,7 +67,7 @@ class ChatAPIViews(APIView):
     permission_classes = [IsAuthenticated]   
     def post(self, request):
         if not request.user.is_authenticated or request.user.is_mentor:
-            return Response({"message": "You need to be logged in as a non-mentor user to perform this action."}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"message": "이 기능을 수행하기 위해선 멘티 사용자로 로그인해야합니다."}, status=status.HTTP_401_UNAUTHORIZED)
 
         questioner = request.user
         serializer = ChatSerializer(data=request.data, context={'request': request})
