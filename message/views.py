@@ -14,13 +14,11 @@ from django.utils import timezone
 from rest_framework.generics import UpdateAPIView
 
 #질문 상태를 대기-> 수락으로 변경하기
-class ChatUpdateStatusAPIView(APIView):
+class MiscellaneousAPIView(APIView):
     permission_classes=[IsAuthenticated]
-    serializer_class = ChatUpdateStatusSerializer
+    #serializer_class = ChatUpdateStatusSerializer
 
-    def patch(self, request):
-        chat_id = request.data.get('chat_id')
-
+    def patch(self, request,chat_id):
         chat = get_object_or_404(Chat, id=chat_id)
 
         if chat.answerer != request.user:
@@ -30,6 +28,15 @@ class ChatUpdateStatusAPIView(APIView):
         chat.save()
 
         return Response({"message": "상태가 성공적으로 변경되었습니다."}, status=status.HTTP_200_OK)
+    def get(self, request,chat_id):
+        try:
+            chat = Chat.objects.get(pk=chat_id)
+        except Chat.DoesNotExist:
+            return Response({"message": "채팅이 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = ChatWithReviewSerializer(chat)
+        return Response(serializer.data)
+    
 
 #가장 최신의 질문글 불러오기
 class RecentQuestionAPIView(APIView):
@@ -50,18 +57,6 @@ class RecentQuestionAPIView(APIView):
         else:
             return Response({"message": "최근에 올린 질문글이 없습니다."}, status=401)
         
-
-class ChatWithReviewAPIView(APIView):
-    def get(self, request):
-        chat_id = request.data.get('chat_id')  # JSON 형식으로 chat_id 받음
-        try:
-            chat = Chat.objects.get(pk=chat_id)
-        except Chat.DoesNotExist:
-            return Response({"message": "채팅이 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
-
-        serializer = ChatWithReviewSerializer(chat)
-        return Response(serializer.data)
-
 
 class ChatAPIViews(APIView):
     permission_classes = [IsAuthenticated]   
