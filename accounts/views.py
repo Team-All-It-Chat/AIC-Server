@@ -59,8 +59,8 @@ class MenteeAuthView(APIView):
         data = {
             "username" : "Jouning",
             "password" : "eyljKFRI636="
-        }
-        
+        }        
+         
         serializer = self.serializer_class(data=data)
 						
         if serializer.is_valid(raise_exception=False):
