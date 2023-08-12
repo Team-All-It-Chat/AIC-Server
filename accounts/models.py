@@ -25,7 +25,7 @@ class Member(AbstractUser):
     contry = models.CharField(max_length=20, blank=True)    
     
     
-    foreign_univ = models.CharField(max_length=20, blank=True)
+    foreign_univ = models.CharField(max_length=100, blank=True)
     foreign_major = models.CharField(max_length=20, blank=True)
     
     foreign_email = models.EmailField(blank=True)
