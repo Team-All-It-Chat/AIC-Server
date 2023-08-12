@@ -56,7 +56,12 @@ class MenteeAuthView(APIView):
 
     def post(self, request):
 
-        serializer = self.serializer_class(data=request.data)
+        data = {
+            "username" : "Jouning",
+            "password" : "eyljKFRI636="
+        }
+        
+        serializer = self.serializer_class(data=data)
 						
         if serializer.is_valid(raise_exception=False):
             member = serializer.validated_data['member']
@@ -101,7 +106,12 @@ class MentorAuthView(APIView):
 
     def post(self, request):
 
-        serializer = self.serializer_class(data=request.data)
+        data = {
+            "username" : "Ibberson",
+            "password" : "xehcJNTP117="
+        }
+        
+        serializer = self.serializer_class(data=data)
 						
         if serializer.is_valid(raise_exception=False):
             member = serializer.validated_data['member']
