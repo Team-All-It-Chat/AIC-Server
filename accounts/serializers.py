@@ -26,7 +26,14 @@ class RegisterSerializer(serializers.ModelSerializer):
             kor_univ=self.validated_data['kor_univ'],
             kor_major=self.validated_data['kor_major'],
             kor_email=self.validated_data['kor_email'],
-            continent=self.validated_data['continent'],
+            # continent=self.validated_data['continent'],
+            # contry=self.validated_data['contry'],
+            # language=self.validated_data['language'],
+            # foreign_univ=self.validated_data['foreign_univ'],
+            # foreign_major=self.validated_data['foreign_major'],
+            # foreign_email=self.validated_data['foreign_email'],
+            # exchangeSemester=self.validated_data['exchangeSemester'],
+            # exchangeDuration=self.validated_data['exchangeDuration'],
         )
 				
 		# password 암호화
