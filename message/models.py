@@ -14,7 +14,7 @@ class Chat(models.Model):
     answer_time = models.DateTimeField(blank=True, null=True)
     status=models.IntegerField(default=0)
 
-#'질문 수락 대기'=0,'수락 후 답변 대기'=1,'답변 완료'=2
+#'질문 대기'=0,'답변 완료'=1,'거절'=2
 
 class Review(models.Model):
     id = models.AutoField(primary_key=True)

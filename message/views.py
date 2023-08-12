@@ -24,7 +24,7 @@ class MiscellaneousAPIView(APIView):
         if chat.answerer != request.user:
             return Response({"message": "답변자만 상태를 변경할 수 있습니다."}, status=status.HTTP_403_FORBIDDEN)
 
-        chat.status = 1  # 상태를 1로 변경
+        chat.status = 2  # 상태를 거절로 변경
         chat.save()
 
         return Response({"message": "상태가 성공적으로 변경되었습니다."}, status=status.HTTP_200_OK)
@@ -92,7 +92,7 @@ class ChatAPIViews(APIView):
             
             chat.answerer.save()
             
-            chat.status = 2
+            chat.status = 1
             chat.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
