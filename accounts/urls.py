@@ -4,10 +4,11 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     # 프로필
-    path('<int:id>/', MemberProfile.as_view()),
+    path('<str:continent>/', MentorProfile.as_view()),
     # 회원가입/로그인/로그아웃
-    path('join/', RegisterView.as_view()),
-    path('login/', AuthView.as_view()),
+    path('signup/', RegisterView.as_view()),
+    path('login/mentee', MenteeAuthView.as_view()),
+    path('login/mentor', MentorAuthView.as_view()),
     # 토큰
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
