@@ -14,8 +14,9 @@ class MentorProfile(APIView):
         serializer = MemberSerializer(profiles, many=True)
         
         return JsonResponse({
-            "data" : serializer.data,
-            "status" : 200
+            "status" : 200,
+            "message": "멘토 프로필 조회 성공",
+            "result" : serializer.data
         })
         
 
@@ -63,26 +64,32 @@ class MenteeAuthView(APIView):
             refresh_token = serializer.validated_data['refresh_token']
             res = Response(
                 {
+                    "status" : 200,
+                    "message":"멘티 로그인 성공",
                     "member": member,
-                    "message":"login success",
                     "token":{
                         "access_token":access_token,
                         "refresh_token":refresh_token,
                     },
-                },
-                status=status.HTTP_200_OK,
+                }
             )
             res.set_cookie("access-token", access_token, httponly=True)
             res.set_cookie("refresh-token", refresh_token, httponly=True)
             return res
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({
+            "status" : 400,
+            "message" : "멘티 로그인 실패",
+            "result" : None
+        })
         
     
     def delete(self, request):
-        res = Response({
-		    "message":"logout success"
-	    }, status=status.HTTP_202_ACCEPTED)
+        res = JsonResponse({
+            "status" : 200,
+		    "message":"멘티 로그 아웃 성공",
+            "result" : None
+	    })
 		
 		# cookie에서 token 값들을 제거함
         res.delete_cookie("access-token")
@@ -102,26 +109,31 @@ class MentorAuthView(APIView):
             refresh_token = serializer.validated_data['refresh_token']
             res = Response(
                 {
+                    "status" : 200,
+                    "message":"멘토 로그인 성공",
                     "member": member,
-                    "message":"login success",
                     "token":{
                         "access_token":access_token,
                         "refresh_token":refresh_token,
                     },
-                },
-                status=status.HTTP_200_OK,
+                }
             )
             res.set_cookie("access-token", access_token, httponly=True)
             res.set_cookie("refresh-token", refresh_token, httponly=True)
             return res
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+            return JsonResponse({
+            "status" : 400,
+            "message" : "멘토 로그인 실패",
+            "result" : None
+        })
     
     def delete(self, request):
-        res = Response({
-		    "message":"logout success"
-	    }, status=status.HTTP_202_ACCEPTED)
+        res = JsonResponse({
+            "status" : 200,
+		    "message":"멘토 로그 아웃 성공",
+            "result" : None
+	    })
 		
 		# cookie에서 token 값들을 제거함
         res.delete_cookie("access-token")
