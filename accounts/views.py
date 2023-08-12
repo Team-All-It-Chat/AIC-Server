@@ -57,21 +57,22 @@ class MenteeAuthView(APIView):
     def post(self, request):
 
         data = {
-            "username" : "Jouning",
-            "password" : "eyljKFRI636="
-        }
+            'username' : 'Jouning',
+            'password' : 'eyljKFRI636='
+        }        
         
         serializer = self.serializer_class(data=data)
 						
         if serializer.is_valid(raise_exception=False):
             member = serializer.validated_data['member']
+            member_serializer = MemberSerializer(member)
             access_token = serializer.validated_data['access_token']
             refresh_token = serializer.validated_data['refresh_token']
             res = Response(
                 {
                     "status" : 200,
                     "message":"멘티 로그인 성공",
-                    "member": member,
+                    "member": member_serializer.data,
                     "token":{
                         "access_token":access_token,
                         "refresh_token":refresh_token,
@@ -115,13 +116,14 @@ class MentorAuthView(APIView):
 						
         if serializer.is_valid(raise_exception=False):
             member = serializer.validated_data['member']
+            member_serializer = MemberSerializer(member)
             access_token = serializer.validated_data['access_token']
             refresh_token = serializer.validated_data['refresh_token']
             res = Response(
                 {
                     "status" : 200,
                     "message":"멘토 로그인 성공",
-                    "member": member,
+                    "member": member_serializer.data,
                     "token":{
                         "access_token":access_token,
                         "refresh_token":refresh_token,

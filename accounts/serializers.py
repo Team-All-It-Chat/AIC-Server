@@ -97,5 +97,5 @@ class AuthSerializer(serializers.ModelSerializer):
 			    'refresh_token':refresh_token,
 			    'access_token':access_token,
         }
-	
+        
         return data
