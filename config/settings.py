@@ -123,6 +123,7 @@ CSRF_TRUSTED_ORIGINS = ALLOWED_ORIGINS.copy()
 #CSRF_TRUSTED_ORIGINS = ["https://all-it-chat.o-r.kr"]
 CORS_ORIGIN_WHITELIST = [
     'https://all-it-chat.o-r.kr',
+    "https://all-it-chat.netlify.app",
     # 다른 허용할 도메인들을 여기에 추가
 ]
 CORS_ALLOW_CREDENTIALS = True
@@ -130,8 +131,11 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [ 
     "http://localhost:3000",
+    "http://localhost:3001",
     "http://127.0.0.1:3000",
-    "https://all-it-chat.o-r.kr"
+    "http://127.0.0.1:3001",
+    "https://all-it-chat.o-r.kr",
+    "https://all-it-chat.netlify.app"
 ]
 
 ROOT_URLCONF = 'config.urls'
