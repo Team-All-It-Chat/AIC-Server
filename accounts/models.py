@@ -36,4 +36,6 @@ class Member(AbstractUser):
     
     chat_count = models.IntegerField(null=True, blank=True)
     review_count = models.IntegerField(null=True, blank=True)
-    profile = models.IntegerField(null=True, blank=True)        
+    profile = models.IntegerField(null=True, blank=True)
+    
+    subject = models.CharField(max_length=20, null=True, blank=True)        
