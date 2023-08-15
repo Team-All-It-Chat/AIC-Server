@@ -16,7 +16,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import ChatSerializer, ReviewSerializer
 from .models import Chat, Review
-    
+from django.shortcuts import get_object_or_404
+
 class ChatAPIViews(APIView):
      #질문 등록하기
     def post(self, request, format=None):
@@ -131,3 +132,49 @@ class RecentQuestionAPIView(APIView):
             return Response(serializer.data)
         else:
             return Response({"message": "최근에 올린 질문글이 없습니다."}, status=401)
+        
+        
+        
+        
+        
+        
+        
+        
+#특정 멘토의 가장 최신 리뷰 불러오기
+class RecentReviewAPIView(APIView):
+    def get(self, request, mentor_id):
+        try:
+            # mentor_id를 가진 멘토가 answerer인 Chat 중 answer가 null이 아닌 채팅 중에서 가장 최신 채팅 가져오기
+            chats = Chat.objects.filter(answerer_id=mentor_id, answer__isnull=False).order_by('-id')
+
+            for chat in chats:
+                # 해당 채팅을 참조하는 리뷰 중 content가 null이 아닌 리뷰 중에서 가장 최신 리뷰 가져오기
+                latest_review = Review.objects.filter(chat_id=chat.id, content__isnull=False).order_by('-id').first()
+                if latest_review:
+                    response_data = {
+                        "status": 200,
+                        "message": "멘토의 최신 리뷰 조회 성공",
+                        "review": {
+                            "review_id": latest_review.id,
+                            "content": latest_review.content,
+                            "sent_time": latest_review.sent_time,
+                            "rate": latest_review.rate,
+                        }
+                    }
+                    return Response(response_data)
+
+            # mentor_id에 해당하는 채팅이 없거나 해당하는 리뷰가 없는 경우
+            response_data = {
+                "status": 404,
+                "message": "멘토의 리뷰가 없거나 조건에 맞는 채팅이 없습니다.",
+                "review": None
+            }
+            return Response(response_data)
+            
+        except Review.DoesNotExist:
+            response_data = {
+                "status": 404,
+                "message": "멘토의 리뷰가 없습니다.",
+                "review": None
+            }
+            return Response(response_data)
