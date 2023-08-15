@@ -40,3 +40,4 @@ class Member(AbstractUser):
     
     tag1 = models.CharField(max_length=20, null=True, blank=True)  
     tag2 = models.CharField(max_length=20, null=True, blank=True)        
+    tag3 = models.CharField(max_length=20, null=True, blank=True)
