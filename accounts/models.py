@@ -38,4 +38,5 @@ class Member(AbstractUser):
     review_count = models.IntegerField(null=True, blank=True)
     profile = models.IntegerField(null=True, blank=True)
     
-    subject = models.CharField(max_length=20, null=True, blank=True)        
+    tag1 = models.CharField(max_length=20, null=True, blank=True)  
+    tag2 = models.CharField(max_length=20, null=True, blank=True)        
