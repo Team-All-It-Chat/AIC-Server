@@ -9,6 +9,7 @@ urlpatterns = [
     path('login/mentor/', MentorAuthView.as_view()),
     # 프로필
     path('<str:continent>/', MentorProfile.as_view()),
+    path('profile/<int:id>/', ProfileDetail.as_view()),
     # 토큰
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

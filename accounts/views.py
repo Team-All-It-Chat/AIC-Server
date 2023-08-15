@@ -15,10 +15,20 @@ class MentorProfile(APIView):
         
         return JsonResponse({
             "status" : 200,
-            "message": "멘토 프로필 조회 성공",
+            "message": "멘토 프로필 목록 조회 성공",
             "result" : serializer.data
         })
         
+class ProfileDetail(APIView):
+    def get(self, request, id):
+        profile = Member.objects.filter(id=id)
+        serializer = MemberSerializer(profile)
+        
+        return JsonResponse({
+            "status" : 200,
+            "message": "멘토 프로필 조회 성공",
+            "result" : serializer.data
+        })
 
 class RegisterView(APIView):
     serializer_class = RegisterSerializer
