@@ -21,7 +21,7 @@ class MentorProfile(APIView):
         
 class ProfileDetail(APIView):
     def get(self, request, id):
-        profile = Member.objects.filter(id=id)
+        profile = Member.objects.get(id=id)
         serializer = MemberSerializer(profile)
         
         return JsonResponse({
