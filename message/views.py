@@ -56,7 +56,7 @@ class RecentReviewAPIView(APIView):
 
 #질문 상태를 대기-> 거절으로 변경하기
 class MiscellaneousAPIView(APIView):
-    permission_classes=[IsAuthenticated]
+    #permission_classes=[IsAuthenticated]
     #serializer_class = ChatUpdateStatusSerializer
 
     def patch(self, request,chat_id):
