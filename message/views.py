@@ -173,7 +173,7 @@ class RecentReviewAPIView(APIView):
             
         except Review.DoesNotExist:
             response_data = {
-                "status": 404,
+                "status": 405,
                 "message": "멘토의 리뷰가 없습니다.",
                 "review": None
             }
