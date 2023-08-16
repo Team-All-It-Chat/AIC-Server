@@ -77,11 +77,13 @@ class AllChatSerializer(serializers.ModelSerializer):
             answerer = Member.objects.get(id=chat.answerer.id)
             review['questioner'] = {
                 'id': questioner.id,
-                'name': questioner.name
+                'name': questioner.name,
+                'profile':questioner.profile
             }
             review['answerer'] = {
                 'id': answerer.id,
-                'name': answerer.name
+                'name': answerer.name,
+                'profile':answerer.profile
             }
         
         return serializer.data
@@ -90,10 +92,12 @@ class AllChatSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         data['questioner'] = {
             'id': instance.questioner.id,
-            'name': instance.questioner.name
+            'name': instance.questioner.name,
+            'profile':instance.questioner.profile
         }
         data['answerer'] = {
             'id': instance.answerer.id,
-            'name': instance.answerer.name
+            'name': instance.answerer.name,
+            'profile':instance.answerer.profile
         }
         return data
