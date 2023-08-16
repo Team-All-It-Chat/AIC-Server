@@ -74,8 +74,10 @@ class MiscellaneousAPIView(APIView):
             chat = Chat.objects.get(pk=chat_id)
         except Chat.DoesNotExist:
             return Response({"message": "채팅이 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = AllChatSerializer(chat)
 
-        serializer = ChatWithReviewSerializer(chat)
+        # serializer = ChatWithReviewSerializer(chat)
         return Response(serializer.data)
     
 
