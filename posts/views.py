@@ -26,25 +26,19 @@ class PostList(APIView):
     def post(self, request, format=None):
         serializer = PostSerializer(data=request.data) 
         
-        serializer.save()
-        return JsonResponse({
-            'status' : 200,
-            'message' : '생성 성공',
-            'result' : serializer.data
-        })
-        # if serializer.is_valid():
-        #     serializer.save()
-        #     return JsonResponse({
-        #         'status' : 200,
-        #         'message' : '생성 성공',
-        #         'result' : serializer.data
-        #     })
-        # else:
-        #     return JsonResponse({
-        #         'status' : 400,
-        #         'message' : '유효하지 않은 데이터',
-        #         'result' : None
-        #     })
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse({
+                'status' : 200,
+                'message' : '생성 성공',
+                'result' : serializer.data
+            })
+        else:
+            return JsonResponse({
+                'status' : 400,
+                'message' : '유효하지 않은 데이터',
+                'result' : None
+            })
     
     def get(self, request, format=None):
         posts = Post.objects.all()
